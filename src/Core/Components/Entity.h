@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entt/entt.hpp"
-#include "Static/Scene.h"
+#include "Core/Scene.h"
 
 #include "Component.h"
 
@@ -10,7 +10,9 @@ namespace PetrolEngine {
     class SystemManager {
     public:
         Scene* scene = nullptr;
-        Vector<void(*)(Scene*)> systems;
+
+        Vector<void(*)(Scene*)> systemUpdates;
+        Vector<void(*)(Scene*)> systemStarts;
 
         template<typename T>
         static void systemUpdate(Scene* scene) {
@@ -24,14 +26,24 @@ namespace PetrolEngine {
         }
 
         template<typename T>
-        void registerSystem() {
-            systems.push_back(systemUpdate<T>);
+        static void systemStart(Scene* scene) {
+            if constexpr (std::is_base_of_v<Component, T>) {
+                auto group = scene->sceneRegistry.view<T>();
+
+                for (auto &entity: group) {
+                    group.template get<T>(entity).onStart();
+                }
+            }
         }
 
-        void update() {
-            for(auto& system : systems)
-                system(scene);
+        template<typename T>
+        void registerSystem() {
+            systemUpdates.push_back(systemUpdate<T>);
+            systemStarts .push_back(systemStart <T>);
         }
+
+        void update() { for(auto& system : systemUpdates) system(scene); }
+        void start () { for(auto& system : systemStarts ) system(scene); }
     };
     
 	class Entity {

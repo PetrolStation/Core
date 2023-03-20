@@ -2,9 +2,9 @@
 
 #include <Core/Aliases.h>
 
-#include <Static/Components/Camera.h>
-#include <Static/Components/Material.h>
-#include <Static/Components/Transform.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Material.h>
+#include <Core/Components/Transform.h>
 
 #include "Shader.h"
 #include "VertexArray.h"

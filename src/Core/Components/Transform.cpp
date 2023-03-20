@@ -1,6 +1,7 @@
 #include <PCH.h>
 
 #include "Transform.h"
+#include "glm/gtc/quaternion.hpp"
 
 namespace PetrolEngine{
     // Transform
@@ -38,6 +39,10 @@ namespace PetrolEngine{
 
     void Transform::setRotation(glm::vec3 b, bool l) {
         rotate(-(glm::eulerAngles(rotation) - b), l);
+    }
+
+    glm::vec3 Transform::getRotation(){
+        return glm::eulerAngles(rotation);
     }
 
     void Transform::rotate(glm::vec3 angles, bool local) {

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 // Math
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -7,7 +10,7 @@
 #include <glm/glm.hpp>
 
 // STD
-#include <filesystem>
+#include  <filesystem>
 #include <iostream>
 #include <optional>
 #include <vector>

@@ -10,12 +10,15 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "Bullet3Common/b3Vector3.h"
 #include "Entity.h"
 #include "Core/Window/Window.h"
 
 #include "Core/Renderer/VertexArray.h"
 
-#include "Static/Components/Component.h"
+#include "Core/Components/Component.h"
+
+#include <Core/Components/MeshRenderer.h>
 
 #include "Transform.h"
 #include "Vertex.h"
@@ -42,19 +45,17 @@ namespace PetrolEngine {
         {"normal"   , ShaderDataType::Float3}
     });
 
-    class Mesh: public Component {
+    class Mesh: public MeshRenderer, public Component {
     public:
         VertexLayout additionalLayout;
 
     public:
-        Material material;
-
         Vector<     uint> indices;
         Vector<glm::vec3> vertices;
         Vector<glm::vec3> normals;
         Vector<glm::vec2> textureCoordinates;
 
-        Ref<VertexArray> vertexArray;
+        operator MeshRenderer*() const { return (MeshRenderer*)this; }
     public:
         Mesh(VertexLayout additionalLayout);
         Mesh();
@@ -63,7 +64,7 @@ namespace PetrolEngine {
         void recalculateMesh(void* additionalData=nullptr, int64 additionalDataSize=0);
 
         NO_DISCARD
-        Ref<VertexArray> getVertexArray() const { return vertexArray; }
+        Ref<VertexArray> getVertexArray() const { return this->vertexArray; } 
 
 		Mesh(
 			const Vector<glm::vec3>& vertices,

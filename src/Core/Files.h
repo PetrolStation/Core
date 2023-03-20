@@ -1,7 +1,9 @@
 #pragma once
 
+#include <PCH.h>
 #include <string>
 
 namespace PetrolEngine {
-	std::string ReadFile(const std::string& filepath);
+	String ReadFile (const String& filepath);
+	String WriteFile(const String& filepath, const String& content);	
 }

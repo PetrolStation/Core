@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Static/Components/Component.h"
+#include "Core/Components/Component.h"
 
 namespace PetrolEngine {
     class DirectionalLight: public Component {

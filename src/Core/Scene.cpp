@@ -1,5 +1,6 @@
 #include <PCH.h>
 
+#include "Freetype/Window/Window.h"
 #include "Scene.h"
 #include "Static/Renderer/Renderer.h"
 #include "Core/Window/Window.h"
@@ -12,15 +13,13 @@
 #include "Components/Camera.h"
 #include "Components/Properties.h"
 
+#include <Bullet.h>
+
 namespace PetrolEngine {
 	Entity* Scene::createEntity(const char* name) {
-        entities.push_back(new Entity(
-            sceneRegistry.create(),
-            this
-        ));
-
-        Entity* entity = entities.back();
-
+        Entity* entity = new Entity(sceneRegistry.create(), this);
+        entities.push_back(entity);
+        auto nv = entt::null;
         entity->addComponent<Properties>(name);
 
         return entity;
@@ -52,13 +51,21 @@ namespace PetrolEngine {
     Scene::Scene() {
         systemManager = new SystemManager();
         systemManager->scene = this;
+        world = new World();
     }
 
-    void Scene::start(){
+    Scene::~Scene(){
+        for(Entity* e : this->entities) delete e;
+        delete this->systemManager;
+        delete this->world;
+    }
 
+    void Scene::start() {
+        systemManager->start();
     }
 
 	void Scene::update() { LOG_FUNCTION();
+                world->update(deltaTime);
 		auto camerasGroup = sceneRegistry.group<Camera>(entt::get<Transform>);
 		auto meshesGroup  = sceneRegistry.group< Mesh >(entt::get<Transform>);
 

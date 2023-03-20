@@ -231,6 +231,17 @@ using std::swap;
 
 #define for3D(_tx, _ty, _tz) for (int z = 0; z < _tz; ++z) for (int y = 0; y < _ty; ++y) for (int x = 0; x < _tx; ++x)
 
+#include <sstream>
+inline std::vector<std::string> split(const std::string &str, char delim) {
+    std::vector<std::string> result;
+    std::stringstream s(str);
+    std::string i;
+
+    while (getline(s, i, delim)) result.push_back (i);
+
+    return result;
+}
+
 // some nice spaghetti here
 
 constexpr bool strSlant(const char *str) { return *str == '/' || *str != 0 && strSlant(str + 1); }

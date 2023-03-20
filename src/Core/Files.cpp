@@ -7,7 +7,7 @@
 // TODO: review this script
 
 namespace PetrolEngine {
-    std::string ReadFile(const std::string& filepath) {
+    String ReadFile(const String& filepath) {
         std::string result;
         std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
 
@@ -24,5 +24,19 @@ namespace PetrolEngine {
         in.read(&result[0], size);
 
         return result;
+    }
+
+    String WriteFile(const String& filepath, const String& content){
+        /*std::ifstream in(filepath, std::ios::out | std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
+
+        if (!in) { LOG("Failed to read content of file(" + filepath + ")", 3); return ""; }
+
+        if (size == -1) { LOG("Failed to read content of file(" + filepath + ")", 3); return ""; }
+
+        in.seekg(0, std::ios::beg);
+        in.w
+        in.read(&result[0], size);
+*/
+        return ""; // result;
     }
 }

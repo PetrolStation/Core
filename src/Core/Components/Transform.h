@@ -5,7 +5,7 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include <Static/Components/Component.h>
+#include <Core/Components/Component.h>
 
 namespace PetrolEngine {
     // This class is pretty memory inefficient, but having
@@ -37,6 +37,8 @@ namespace PetrolEngine {
 
         void setRotation(glm::vec3 angles, bool local = true);
         void    rotate  (glm::vec3 angles, bool local = true);
+
+        glm::vec3 getRotation();
 
         //Transform() = default;
         Transform(

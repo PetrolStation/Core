@@ -1,8 +1,7 @@
 #include "PCH.h"
 
-#include "Static/Components/Entity.h"
-
-#include "Static/Scene.h"
+#include "Core/Components/Entity.h"
+#include "Core/Scene.h"
 
 namespace PetrolEngine {
     Entity::Entity(entt::entity entity, Scene* scene): entity(entity), scene(scene) {};

@@ -2,24 +2,32 @@
 
 #include "Core/Aliases.h"
 
+#include <Bullet.h>
+
 namespace PetrolEngine {
 
     class Entity;
     class SystemManager;
 
-	class Scene {
-	public:
-		Entity* createEntity(const char* name);
+    class Scene {
+        public:
+        Entity* createEntity(const char* name);
 
         Entity* createGameObject(const char* name, Entity* parent = nullptr);
 
         Entity* getEntityById(unsigned int id);
 
         Scene();
+        ~Scene();
 
-		void update();
+        Scene(const Scene&) = delete;
+        Scene(Scene&&) = default;
+
+        void update();
         void start();
+        
         entt::registry sceneRegistry;
+        World* world = nullptr;
 
     private:
         Vector<Entity*> entities;

@@ -1,11 +1,10 @@
 #pragma once
 
+#include <Core/Components/Component.h>
 #include <Core/Aliases.h>
 
 #include <glm/vec3.hpp>
 #include <glm/matrix.hpp>
-
-#include <Static/Components/Component.h>
 
 // TODO: make camera rotation work
 
@@ -14,9 +13,9 @@ namespace PetrolEngine {
     public:
         glm::ivec2 resolution = glm::ivec2(1280, 720);
 
-        float zoom  =  45.0f;
+        float zoom  =  60.0f;
         float near  =   0.1f;
-        float far   = 100.0f;
+        float far   = 500.0f;
 
         Camera();
 

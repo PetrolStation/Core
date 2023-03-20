@@ -2,7 +2,7 @@
 
 #include "Mesh.h"
 
-#include "Static/Components/Vertex.h"
+#include "Core/Components/Vertex.h"
 #include <Static/Renderer/Renderer.h>
 
 namespace PetrolEngine {

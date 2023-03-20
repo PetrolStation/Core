@@ -1,8 +1,8 @@
 #include <PCH.h>
 
-#include "Static/Components/Camera.h"
-#include "Static/Components/Entity.h"
-#include "Static/Components/Transform.h"
+#include "Core/Components/Camera.h"
+#include "Core/Components/Entity.h"
+#include "Core/Components/Transform.h"
 
 namespace PetrolEngine {
     // Camera
