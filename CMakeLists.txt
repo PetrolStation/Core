@@ -20,6 +20,8 @@ PA_LINK_LIBRARIES(
 File(GLOB_RECURSE SOURCE_FILES src/*.cpp )
 File(GLOB_RECURSE HEADER_FILES src/*.h   )
 
+add_compile_definitions(NOMINMAX)
+
 pa_add_source_files(
     ${SOURCE_FILES}
     ${HEADER_FILES}
