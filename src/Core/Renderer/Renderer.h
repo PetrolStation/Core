@@ -8,7 +8,7 @@
 
 #include "Shader.h"
 #include "VertexArray.h"
-#include <Static/Renderer/Text.h>
+#include <Freetype/Renderer/Text.h>
 // TODO: remove camera and mesh dependency.
 
 namespace PetrolEngine {
