@@ -9,7 +9,7 @@ namespace PetrolEngine {
     Camera::Camera() { updatePerspective(); }
 
     void Camera::updatePerspective() {
-        perspective = glm::perspective(glm::radians(zoom), (float) resolution.x / (float) resolution.y, near, far);
+        perspective = glm::perspective(glm::radians(zoom), (float) resolution.x / (float) resolution.y, near_, far_);
     }
 
     void Camera::updateView() { LOG_FUNCTION();
