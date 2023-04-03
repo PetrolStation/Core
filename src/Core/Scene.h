@@ -7,13 +7,14 @@
 namespace PetrolEngine {
 
     class Entity;
+    class GameObject;
     class SystemManager;
 
     class Scene {
         public:
         Entity* createEntity(const char* name);
 
-        Entity* createGameObject(const char* name, Entity* parent = nullptr);
+        GameObject* createGameObject(const char* name, Entity* parent = nullptr);
 
         Entity* getEntityById(unsigned int id);
 

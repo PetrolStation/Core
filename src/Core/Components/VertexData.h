@@ -33,6 +33,8 @@ namespace PetrolEngine {
 
                 tmp += size;
             }
+
+            return VertexAttribute(0, nullptr);
         }
     };
 

@@ -7,6 +7,7 @@
 #include "Components/Entity.h"
 #include "Core/DebugTools.h"
 
+#include "GameObject.h"
 #include "Components/Entity.h"
 #include "Components/Transform.h"
 #include "Components/Mesh.h"
@@ -16,19 +17,20 @@
 #include <Bullet.h>
 
 namespace PetrolEngine {
-	Entity* Scene::createEntity(const char* name) {
+    Entity* Scene::createEntity(const char* name) {
         Entity* entity = new Entity(sceneRegistry.create(), this);
         entities.push_back(entity);
-        auto nv = entt::null;
+        
         entity->addComponent<Properties>(name);
 
         return entity;
-	}
+    }
 
-    Entity* Scene::createGameObject(const char* name, Entity* parent) {
-        Entity* entity = createEntity(name);
+    GameObject* Scene::createGameObject(const char* name, Entity* parent) {
+        GameObject* entity = new GameObject(*createEntity(name));
 
         auto& transform = entity->addComponent<Transform>();
+        entity->transform = &transform;
 
         if (entity->scene == nullptr) {
             LOG("Entity has no scene", 2);
