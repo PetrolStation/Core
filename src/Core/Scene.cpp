@@ -63,7 +63,11 @@ namespace PetrolEngine {
     }
 
     void Scene::start() {
+        if (this->started) return;
+
         systemManager->start();
+
+        this->started = true;
     }
 
 	void Scene::update() { LOG_FUNCTION();

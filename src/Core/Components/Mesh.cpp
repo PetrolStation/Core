@@ -4,9 +4,12 @@
 
 #include "Core/Components/Vertex.h"
 #include <Static/Renderer/Renderer.h>
+#include <Core/Components/VertexData.h>
+#include <Core/Components/Entity.h>
 
 namespace PetrolEngine {
     Mesh::Mesh(VertexLayout additionalLayout) {
+        /*
         this->material         = Material();
         this->additionalLayout = additionalLayout;
 
@@ -21,10 +24,19 @@ namespace PetrolEngine {
         this->vertexArray->addVertexBuffer(vertexBufferS);
         this->vertexArray->addVertexBuffer(vertexBufferE);
         this->vertexArray-> setIndexBuffer( indexBuffer );
+        */
+
+        this->meshRenderer = new MeshRenderer();
+        
+        recalculateMesh();
+    }
+
+    void Mesh::onStart() {
+        this->meshRenderer = &this->entity->addComponent<MeshRenderer>(*this->meshRenderer);
     }
 
     Mesh::Mesh() {
-//        recalculateMesh();
+        this->meshRenderer = new MeshRenderer();
     }
 
     Mesh::Mesh(
@@ -34,13 +46,15 @@ namespace PetrolEngine {
             VertexLayout             additionalData) {
         this->vertices = vertices;
         this->indices  = indices;
-        this->material = material;
+
+        this->meshRenderer = new MeshRenderer();
+        this->meshRenderer->material = material;
 
         recalculateMesh();
     }
 
     void Mesh::recalculateMesh(void* additionalData, int64 additionalDataSize) {
-        this->vertexArray = Renderer::createVertexArray();
+        this->meshRenderer->vertexArray = Renderer::createVertexArray();
 
         auto vertexBufferS = Renderer::newVertexBuffer(standardLayout);
         auto indexBuffer   = Renderer::newIndexBuffer ();
@@ -71,8 +85,8 @@ namespace PetrolEngine {
         vertexBufferS->setData(vertexData.data, (int64) vertexCount    * (int64) vertexData.elementSize);
         indexBuffer  ->setData(indices.data() , (int64) indices.size() * (int64) sizeof(uint));
 
-        this->vertexArray-> setIndexBuffer( indexBuffer );
-        this->vertexArray->addVertexBuffer(vertexBufferS);
+        this->meshRenderer->vertexArray-> setIndexBuffer( indexBuffer );
+        this->meshRenderer->vertexArray->addVertexBuffer(vertexBufferS);
     }
 
     void Mesh::invertFaces() {

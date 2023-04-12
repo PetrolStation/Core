@@ -9,6 +9,7 @@ namespace PetrolEngine {
 
     class SystemManager {
     public:
+        bool started = false;
         Scene* scene = nullptr;
 
         Vector<void(*)(Scene*)> systemUpdates;
@@ -38,12 +39,24 @@ namespace PetrolEngine {
 
         template<typename T>
         void registerSystem() {
+            static bool registered = false;
+
+            if(registered) return;
+
             systemUpdates.push_back(systemUpdate<T>);
             systemStarts .push_back(systemStart <T>);
+
+            registered = true;
         }
 
         void update() { for(auto& system : systemUpdates) system(scene); }
-        void start () { for(auto& system : systemStarts ) system(scene); }
+        void start () {
+            if(started) return;
+
+            started = true;
+
+            for(int i = 0; i < systemStarts.size(); i++) systemStarts[i](scene);
+        }
     };
     
 	class Entity {
@@ -56,6 +69,7 @@ namespace PetrolEngine {
             if constexpr (std::is_base_of_v<Component, T>) {
                 scene->systemManager->template registerSystem<T>();
                 c.transform = &getComponent<Transform>();
+                if(scene->isStarted()) c.onStart();
             }
 
             return c;

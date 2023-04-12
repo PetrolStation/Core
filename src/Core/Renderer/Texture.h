@@ -57,7 +57,7 @@ namespace PetrolEngine {
         TextureCube = 0x0004
     };
 
-    TextureFormat getFormat(const Image* image);
+    TextureFormat getFormat(const Image& image);
 
 	class Texture {
 	public:

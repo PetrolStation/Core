@@ -38,7 +38,7 @@ namespace PetrolEngine {
                                   const String& fragmentShader,
                                   const String& geometryShader  ) = 0;
 
-        virtual Texture* newTexture(const Image* image) = 0;
+        virtual Texture* newTexture(const Image& image) = 0;
         virtual Texture* newTexture(int width, int height, TextureFormat format, TextureType type) = 0;
 
         virtual Framebuffer* newFramebuffer(const FramebufferSpecification& spec) = 0;

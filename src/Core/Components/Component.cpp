@@ -3,3 +3,8 @@
 //
 
 #include "Component.h"
+#include <Core/Components/Entity.h>
+
+namespace PetrolEngine {
+    
+}

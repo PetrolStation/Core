@@ -10,21 +10,13 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "Bullet3Common/b3Vector3.h"
-#include "Entity.h"
-#include "Core/Window/Window.h"
-
 #include "Core/Renderer/VertexArray.h"
 
 #include "Core/Components/Component.h"
 
 #include <Core/Components/MeshRenderer.h>
 
-#include "Transform.h"
-#include "Vertex.h"
 #include "Material.h"
-
-#include "VertexData.h"
 
 /*
  * TODO:
@@ -45,9 +37,12 @@ namespace PetrolEngine {
         {"normal"   , ShaderDataType::Float3}
     });
 
-    class Mesh: public MeshRenderer, public Component {
+    class Mesh: public Component {
     public:
+        MeshRenderer* meshRenderer = nullptr;
         VertexLayout additionalLayout;
+
+        void onStart() override;
 
     public:
         Vector<     uint> indices;
@@ -55,7 +50,7 @@ namespace PetrolEngine {
         Vector<glm::vec3> normals;
         Vector<glm::vec2> textureCoordinates;
 
-        operator MeshRenderer*() const { return (MeshRenderer*)this; }
+        operator MeshRenderer*() const { return meshRenderer; }
     public:
         Mesh(VertexLayout additionalLayout);
         Mesh();
@@ -64,7 +59,7 @@ namespace PetrolEngine {
         void recalculateMesh(void* additionalData=nullptr, int64 additionalDataSize=0);
 
         NO_DISCARD
-        Ref<VertexArray> getVertexArray() const { return this->vertexArray; } 
+        Ref<VertexArray> getVertexArray() const { return this->meshRenderer->vertexArray; } 
 
 		Mesh(
 			const Vector<glm::vec3>& vertices,

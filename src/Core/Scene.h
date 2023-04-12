@@ -30,9 +30,11 @@ namespace PetrolEngine {
         entt::registry sceneRegistry;
         World* world = nullptr;
 
+        bool isStarted() const { return started; }
     private:
         Vector<Entity*> entities;
         SystemManager* systemManager;
+        bool started = false;
         friend class Entity;
         friend class SystemManager;
 	};
