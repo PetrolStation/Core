@@ -25,5 +25,7 @@ namespace PetrolEngine {
 
         // function used in debug mode to check if entity has required components
         virtual void preValidate() {};
+
+        virtual ~Component() {};
     };
 }

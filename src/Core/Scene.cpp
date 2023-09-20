@@ -53,13 +53,11 @@ namespace PetrolEngine {
     Scene::Scene() {
         systemManager = new SystemManager();
         systemManager->scene = this;
-        world = new World();
     }
 
     Scene::~Scene(){
         for(Entity* e : this->entities) delete e;
         delete this->systemManager;
-        delete this->world;
     }
 
     void Scene::start() {
@@ -71,7 +69,6 @@ namespace PetrolEngine {
     }
 
 	void Scene::update() { LOG_FUNCTION();
-                world->update(deltaTime);
 		auto camerasGroup = sceneRegistry.group<Camera>(entt::get<Transform>);
 		auto meshesGroup  = sceneRegistry.group< Mesh >(entt::get<Transform>);
 

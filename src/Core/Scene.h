@@ -2,8 +2,6 @@
 
 #include "Core/Aliases.h"
 
-#include <Bullet.h>
-
 namespace PetrolEngine {
 
     class Entity;
@@ -18,6 +16,16 @@ namespace PetrolEngine {
 
         Entity* getEntityById(unsigned int id);
 
+        template<typename T>
+        Entity* getEntityByComponent() {
+            auto group = sceneRegistry.view<T>();
+
+            for (auto &entity: group)
+                return getEntityById((unsigned int)entity);
+
+            return nullptr;
+        }
+
         Scene();
         ~Scene();
 
@@ -28,7 +36,6 @@ namespace PetrolEngine {
         void start();
         
         entt::registry sceneRegistry;
-        World* world = nullptr;
 
         bool isStarted() const { return started; }
     private:
