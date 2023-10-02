@@ -13,8 +13,7 @@
 #include "Components/Mesh.h"
 #include "Components/Camera.h"
 #include "Components/Properties.h"
-
-#include <Bullet.h>
+#include "Components/Sprite.h"
 
 namespace PetrolEngine {
     Entity* Scene::createEntity(const char* name) {
@@ -70,7 +69,8 @@ namespace PetrolEngine {
 
 	void Scene::update() { LOG_FUNCTION();
 		auto camerasGroup = sceneRegistry.group<Camera>(entt::get<Transform>);
-		auto meshesGroup  = sceneRegistry.group< Mesh >(entt::get<Transform>);
+		auto  meshesGroup = sceneRegistry.group< Mesh >(entt::get<Transform>);
+		auto spritesGroup = sceneRegistry.group<Sprite>(entt::get<Transform>);
 
 		for (auto cameraID : camerasGroup) { LOG_SCOPE("Processing camera view");
 			auto& cam = camerasGroup.get<Camera>(cameraID);
@@ -86,6 +86,13 @@ namespace PetrolEngine {
                 Transform t = transform.getRelativeTransform();
 
 				Renderer::renderMesh(mesh, t);
+			}
+
+			for(auto& entity : spritesGroup){
+			    auto& transform = spritesGroup.get<Transform>(entity);
+			    auto& sprite    = spritesGroup.get<  Sprite >(entity);
+
+                Renderer::drawQuad2D(sprite.material.textures[0].get(), &transform, sprite.material.shader.get(), &cam, sprite.texCoords);
 			}
 			
 		}
