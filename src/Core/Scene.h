@@ -8,6 +8,8 @@ namespace PetrolEngine {
     class GameObject;
     class SystemManager;
 
+    uint64_t timeMillisec();
+
     class Scene {
         public:
         Entity* createEntity(const char* name);
@@ -39,6 +41,7 @@ namespace PetrolEngine {
 
         bool isStarted() const { return started; }
     private:
+        Vector<Entity*> toDelete;
         Vector<Entity*> entities;
         SystemManager* systemManager;
         bool started = false;

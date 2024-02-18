@@ -12,7 +12,6 @@ PA_INCLUDE_DIRECTORIES(
 )
 
 PA_LINK_LIBRARIES(
-    PRIVATE common
     PRIVATE shaderc
     PRIVATE spirv-cross-cpp
 )

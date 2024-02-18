@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/Components/Properties.h"
 #include "entt/entt.hpp"
 #include "Core/Scene.h"
-
+#include <iostream>
 #include "Component.h"
 
 namespace PetrolEngine {
@@ -79,6 +80,15 @@ namespace PetrolEngine {
         template<typename T>
         T& getComponent() {
             return scene->sceneRegistry.get<T>(entity);
+        }
+
+        void destroy(){
+            std::cout<<this->getComponent<Properties>().name<<" - make me  crazy\n";
+            bool found = false;
+            for(int i=0;i<scene->toDelete.size();i++){
+                if(scene->toDelete[i] == this) found = true;
+            }
+            if(found == false) scene->toDelete.push_back(this);
         }
 
         // returns how many components of type T are attached to this entity (can be used as bool)

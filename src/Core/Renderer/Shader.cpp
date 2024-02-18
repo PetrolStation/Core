@@ -32,7 +32,8 @@ namespace PetrolEngine {
         //options.SetHlslOffsets(true);
         //options.SetHlslRegisterSetAndBinding(true);
         //options.SetHlslFunctionality1(true);
-
+        std::cout<<shaderSource<<"\n";
+        
         auto result = compiler.CompileGlslToSpv(
                 shaderSource,
                 shaderTypeToShadercShaderKind(type),

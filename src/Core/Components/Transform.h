@@ -54,10 +54,10 @@ namespace PetrolEngine {
         void updateTransformMatrix();
         void updateOrientation();
 
-        Transform getRelativeTransform(){
+        Transform getRelativeTransform() const {
             Transform result = Transform();
 
-            for(Transform* t = this; t != nullptr; t = t->parent)
+            for(const Transform* t = this; t != nullptr; t = t->parent)
                 result += *t;
 
             return result;

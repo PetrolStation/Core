@@ -8,6 +8,8 @@ namespace PetrolEngine {
 
     class InternalComponent {
     public:
+        // TODO: maybe delete it but for now i like my pointers stable
+        static constexpr auto in_place_delete = true;
         Entity* entity = nullptr;
     };
 
@@ -25,7 +27,7 @@ namespace PetrolEngine {
 
         // function used in debug mode to check if entity has required components
         virtual void preValidate() {};
-
+        Component() = default;
         virtual ~Component() {};
     };
 }

@@ -6,12 +6,15 @@
 #include <mutex>
 #include <fstream>
 
+/*
 #if defined(__linux__)
 #    define DEBUG_TOOLS_CLOCK std::chrono::system_clock
 #else
 #    define DEBUG_TOOLS_CLOCK std::chrono::steady_clock
 #endif
+*/
 
+#define DEBUG_TOOLS_CLOCK std::chrono::system_clock
 namespace PetrolEngine::Debugging {
 
 	using TimeUnit = std::chrono::microseconds;
