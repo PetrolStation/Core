@@ -240,7 +240,16 @@ inline std::vector<std::string> split(const std::string &str, char delim) {
     while (getline(s, i, delim)) result.push_back (i);
 
     return result;
-}
+}/*
+inline std::vector<std::string> split(std::string str, char delim) {
+    std::vector<std::string> result;
+    std::stringstream s(str);
+    std::string i;
+
+    while (getline(s, i, delim)) result.push_back (i);
+
+    return result;
+}*/
 
 // some nice spaghetti here
 
@@ -249,6 +258,11 @@ constexpr bool strSlant(const char *str) { return *str == '/' || *str != 0 && st
 constexpr const char* rSlant           (const char* str) { return *str == '/' ? (str + 1) : rSlant(str - 1); }
 constexpr const char* strEnd           (const char *str) { return *str ?  strEnd(str + 1) : str;             }
 constexpr const char* constExprFilename(const char* str) { return strSlant(str) ? rSlant(strEnd(str)) : str; }
+
+
+template<typename T, typename U> constexpr size_t offsetOf(U T::*member) {
+    return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+}
 
 
 template<typename T1, typename T2>

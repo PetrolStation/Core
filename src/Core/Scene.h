@@ -9,10 +9,10 @@ namespace PetrolEngine {
     class SystemManager;
 
     uint64_t timeMillisec();
-
+    
     class Scene {
         public:
-        Entity* createEntity(const char* name);
+        Entity* createEntity(const char* name, Entity* parent = nullptr);
 
         GameObject* createGameObject(const char* name, Entity* parent = nullptr);
 
@@ -40,14 +40,16 @@ namespace PetrolEngine {
         entt::registry sceneRegistry;
 
         bool isStarted() const { return started; }
+        Vector<Entity*> entities;
     private:
         Vector<Entity*> toDelete;
-        Vector<Entity*> entities;
         SystemManager* systemManager;
         bool started = false;
         friend class Entity;
         friend class SystemManager;
 	};
+    
+    extern Vector<Scene*> loadedScenes;
 }
 
 

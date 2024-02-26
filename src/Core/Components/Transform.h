@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Core/Aliases.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/matrix.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <unordered_map>
 
 #include <Core/Components/Component.h>
 
@@ -83,6 +85,14 @@ namespace PetrolEngine {
             updateTransformMatrix();
 
             return *this;
+        }
+        
+        const InspectorTypes inspectorTypes() override {
+            static const InspectorTypes i{{
+                std::string("position"),
+                std::pair(InspectorType::Float3, offsetOf(&Transform::position))
+            }};
+            return i;
         }
     };
 }

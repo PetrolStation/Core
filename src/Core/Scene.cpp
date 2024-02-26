@@ -17,6 +17,7 @@
 #include "Components/Sprite.h"
 
 namespace PetrolEngine {
+    Vector<Scene*> loadedScenes;
 
     uint64_t timeMillisec() {
         using namespace std::chrono;
@@ -25,17 +26,24 @@ namespace PetrolEngine {
         return time - f;
     }
 
-    Entity* Scene::createEntity(const char* name) {
+    Entity* Scene::createEntity(const char* name, Entity* parent) {
         Entity* entity = new Entity(sceneRegistry.create(), this);
         entities.push_back(entity);
         
         entity->addComponent<Properties>(name);
-
+        entity->parent = parent;
+        if(parent != nullptr) parent->children.push_back(entity);
         return entity;
     }
 
     GameObject* Scene::createGameObject(const char* name, Entity* parent) {
-        GameObject* entity = new GameObject(*createEntity(name));
+        GameObject* entity = new GameObject(sceneRegistry.create(), this);
+        
+        entities.push_back(entity);
+        
+        entity->addComponent<Properties>(name);
+        entity->parent = parent;
+        if(parent != nullptr) parent->children.push_back(entity);
 
         auto& transform = entity->addComponent<Transform>();
         entity->transform = &transform;
@@ -61,6 +69,7 @@ namespace PetrolEngine {
     Scene::Scene() {
         systemManager = new SystemManager();
         systemManager->scene = this;
+        loadedScenes.push_back(this);
     }
 
     Scene::~Scene(){

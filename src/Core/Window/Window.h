@@ -224,7 +224,7 @@ namespace PetrolEngine {
 		virtual void createWindowSurface(void* instance, const void* allocation, void* surface) = 0;
 
 		NO_DISCARD float getAspectRatio() const;
-
+        void* i_window = nullptr;
 	protected:
 		WindowData windowData;
         Image* icon = nullptr;

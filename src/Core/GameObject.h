@@ -6,6 +6,6 @@ namespace PetrolEngine {
     public:
         Transform* transform;
         
-        GameObject(Entity entity): Entity(entity) {};
+        explicit GameObject(entt::entity entity = entt::null, Scene* scene = nullptr): Entity(entity, scene) {};
     };
 }

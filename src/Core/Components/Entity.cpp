@@ -4,6 +4,8 @@
 #include "Core/Scene.h"
 
 namespace PetrolEngine {
+	  Vector<entt::id_type> Entity::componentTypes;
+
     Entity::Entity(entt::entity entity, Scene* scene): entity(entity), scene(scene) {};
 
     uint   Entity::getID   () { return (uint) entity; }

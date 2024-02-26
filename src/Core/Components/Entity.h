@@ -59,13 +59,21 @@ namespace PetrolEngine {
             for(int i = 0; i < systemStarts.size(); i++) systemStarts[i](scene);
         }
     };
-    
+   
 	class Entity {
 	public:
+	    static Vector<entt::id_type> componentTypes;
+
 		template<typename T, typename ... Args>
 		T& addComponent(Args&&... args) {
             auto& c = scene->sceneRegistry.emplace<T>(entity, std::forward<Args>(args)...);
             c.entity = this;
+            auto tt = entt::type_hash<T>::value();
+            bool found = false;
+            for(auto type : componentTypes){
+                if(type == tt) found = true;
+            }
+            if(!found) componentTypes.push_back(tt);
 
             if constexpr (std::is_base_of_v<Component, T>) {
                 scene->systemManager->template registerSystem<T>();
@@ -106,6 +114,8 @@ namespace PetrolEngine {
 		Scene* getScene();
 		bool isValid();
 
+        Entity* parent = nullptr;
+        Vector<Entity*> children;
 	private:
         // Entity should be created only by Scene class
         explicit Entity(entt::entity entity = entt::null, Scene* scene = nullptr);
@@ -114,6 +124,7 @@ namespace PetrolEngine {
 		Scene*       scene  {   nullptr  };
 
         friend class Scene;
+        friend class GameObject;
 	};
 
 } 

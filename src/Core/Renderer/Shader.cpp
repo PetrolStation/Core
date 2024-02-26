@@ -32,7 +32,6 @@ namespace PetrolEngine {
         //options.SetHlslOffsets(true);
         //options.SetHlslRegisterSetAndBinding(true);
         //options.SetHlslFunctionality1(true);
-        std::cout<<shaderSource<<"\n";
         
         auto result = compiler.CompileGlslToSpv(
                 shaderSource,
@@ -74,9 +73,9 @@ namespace PetrolEngine {
         spirv_cross::Compiler compiler(spv);
         spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-        LOG("Reflect - " + this->name, 3);
-        LOG("uniform buffers - " + toString(resources.uniform_buffers.size()), 3);
-        LOG("resources - "       + toString(resources.sampled_images .size()), 3);
+        //LOG("Reflect - " + this->name, 3);
+        //LOG("uniform buffers - " + toString(resources.uniform_buffers.size()), 3);
+        //LOG("resources - "       + toString(resources.sampled_images .size()), 3);
 
         for(const auto& resource : resources.sampled_images){
             uint32 binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
@@ -84,7 +83,7 @@ namespace PetrolEngine {
             this->metadata.textures.push_back(binding);
         }
 
-        LOG("Uniform buffers:", 3);
+        //LOG("Uniform buffers:", 3);
         for (const auto& resource : resources.uniform_buffers) {
             const auto& bufferType = compiler.get_type(resource.base_type_id);
             uint32_t bufferSize    = compiler.get_declared_struct_size(bufferType);
@@ -94,10 +93,10 @@ namespace PetrolEngine {
 
             this->metadata.uniforms[resource.name] = binding;
 
-            LOG(resource.name     + ":", 3);
-            LOG("  * Size = {0}"    + toString(bufferSize ), 3);
-            LOG("  * Binding = {0}" + toString(binding    ), 3);
-            LOG("  * Members = {0}" + toString(memberCount), 3);
+            //LOG(resource.name     + ":", 3);
+            //LOG("  * Size = {0}"    + toString(bufferSize ), 3);
+            //LOG("  * Binding = {0}" + toString(binding    ), 3);
+            //LOG("  * Members = {0}" + toString(memberCount), 3);
         }
     }
 }
