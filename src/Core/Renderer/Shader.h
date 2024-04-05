@@ -14,9 +14,11 @@ namespace PetrolEngine {
     };
 
     shaderc_shader_kind shaderTypeToShadercShaderKind(ShaderType type);
-
+    String              shaderTypeToShadercExtensionS(ShaderType type);
+    
     class Shader {
     public:
+        static bool alwaysCompile;
         String name;
         
         virtual ~Shader() = default;

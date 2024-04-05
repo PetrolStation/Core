@@ -3,6 +3,7 @@
 #include <Core/Aliases.h>
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/Shader.h"
+#include <cstring>
 
 namespace PetrolEngine {
     class VertexAttribute {
@@ -28,7 +29,7 @@ namespace PetrolEngine {
             for (auto& element : layout->getElements()) {
                 uint8 size = ShaderDataTypeSize(element.type);
 
-                if (element.name == name)
+                if (!strcmp(element.name, name))
                     return VertexAttribute(size, tmp);
 
                 tmp += size;

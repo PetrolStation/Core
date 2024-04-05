@@ -1,10 +1,11 @@
 #pragma once
-
+#include "Core/json.hpp"
+#define Expose
 #include "Core/Aliases.h"
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/matrix.hpp>
-#include <glm/gtc/quaternion.hpp>
+//#include <glm/vec2.hpp>
+//#include <glm/vec3.hpp>
+//#include <glm/matrix.hpp>
+//#include <glm/gtc/quaternion.hpp>
 #include <unordered_map>
 
 #include <Core/Components/Component.h>
@@ -15,11 +16,11 @@ namespace PetrolEngine {
     // is just more convenient.
     class Transform: public InternalComponent {
     public:
-        Transform* parent = nullptr;
+        const Transform* parent = nullptr;
 
-        glm::vec3 position       = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::vec3 scale          = glm::vec3(1.0f, 1.0f, 1.0f);
-        glm::quat rotation       = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+        [[Expose]] glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+        [[Expose]] glm::vec3 scale    = glm::vec3(1.0f, 1.0f, 1.0f);
+        [[Expose]]  glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
         glm::vec3 forward = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 right   = glm::vec3(1.0f, 0.0f,  0.0f);
@@ -87,12 +88,7 @@ namespace PetrolEngine {
             return *this;
         }
         
-        const InspectorTypes inspectorTypes() override {
-            static const InspectorTypes i{{
-                std::string("position"),
-                std::pair(InspectorType::Float3, offsetOf(&Transform::position))
-            }};
-            return i;
-        }
     };
+
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Transform, position, scale);
 }

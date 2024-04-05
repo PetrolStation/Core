@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Components/Properties.h"
+#include "Core/DebugTools.h"
 #include "entt/entt.hpp"
 #include "Core/Scene.h"
 #include <iostream>
@@ -50,8 +51,10 @@ namespace PetrolEngine {
             registered = true;
         }
 
-        void update() { for(auto& system : systemUpdates) system(scene); }
-        void start () {
+        void update() { LOG_FUNCTION();
+            for(auto& system : systemUpdates) system(scene);
+        }
+        void start () { LOG_FUNCTION();
             if(started) return;
 
             started = true;
@@ -62,26 +65,27 @@ namespace PetrolEngine {
    
 	class Entity {
 	public:
-	    static Vector<entt::id_type> componentTypes;
+        String name;
+	    static Set<entt::id_type> componentTypes;
 
 		template<typename T, typename ... Args>
 		T& addComponent(Args&&... args) {
-            auto& c = scene->sceneRegistry.emplace<T>(entity, std::forward<Args>(args)...);
-            c.entity = this;
-            auto tt = entt::type_hash<T>::value();
-            bool found = false;
-            for(auto type : componentTypes){
-                if(type == tt) found = true;
-            }
-            if(!found) componentTypes.push_back(tt);
+            auto typeId = entt::type_hash<T>::value();
+            auto& component = scene->sceneRegistry.emplace<T>(entity, std::forward<Args>(args)...);
+            component.entity = this;
+            
+            componentTypes.insert(typeId);
+
+            if constexpr (std::is_base_of_v<InternalComponent, T>)
+                component.typeId = typeId;
 
             if constexpr (std::is_base_of_v<Component, T>) {
                 scene->systemManager->template registerSystem<T>();
-                c.transform = &getComponent<Transform>();
-                if(scene->isStarted()) c.onStart();
+                component.transform = &getComponent<Transform>();
+                if(scene->isStarted()) component.onStart();
             }
 
-            return c;
+            return component;
 		}
 
         // adds component of type T to this entity and returns reference to it
@@ -118,7 +122,7 @@ namespace PetrolEngine {
         Vector<Entity*> children;
 	private:
         // Entity should be created only by Scene class
-        explicit Entity(entt::entity entity = entt::null, Scene* scene = nullptr);
+        explicit Entity(entt::entity entity = entt::null, Scene* scene = nullptr, String name = "Entity");
 
         entt::entity entity { entt::null };
 		Scene*       scene  {   nullptr  };

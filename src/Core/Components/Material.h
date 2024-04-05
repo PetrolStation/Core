@@ -1,3 +1,4 @@
+#define Expose
 #pragma once
 
 #include <Core/Aliases.h>
@@ -17,7 +18,7 @@ namespace PetrolEngine {
             this->shader = shader;
         }
 
-		Vector<Ref<Texture>> textures;
+	Vector<Ref<Texture>> textures;
         Ref<Shader> shader;
 	};
 }

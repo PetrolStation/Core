@@ -67,6 +67,7 @@ namespace PetrolEngine {
     class RendererAPI {
     public:
         virtual void drawQuad2D(const Texture* texture, const Transform* transform, Shader* shader, const Camera* camera, glm::vec4 texCoords = {0,0,1,1}) = 0;
+        virtual void draw() = 0;
 
         virtual int  init    (bool debug) = 0;
 

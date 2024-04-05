@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Aliases.h"
+#include "json.hpp"
 
 namespace PetrolEngine {
 
@@ -12,9 +13,9 @@ namespace PetrolEngine {
     
     class Scene {
         public:
-        Entity* createEntity(const char* name, Entity* parent = nullptr);
+        Entity* createEntity(String name, Entity* parent = nullptr);
 
-        GameObject* createGameObject(const char* name, Entity* parent = nullptr);
+        GameObject* createGameObject(String name, Entity* parent = nullptr);
 
         Entity* getEntityById(unsigned int id);
 
@@ -38,6 +39,9 @@ namespace PetrolEngine {
         void start();
         
         entt::registry sceneRegistry;
+
+        void serialize();
+        void deserialize();
 
         bool isStarted() const { return started; }
         Vector<Entity*> entities;

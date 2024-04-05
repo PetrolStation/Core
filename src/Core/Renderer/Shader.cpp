@@ -1,16 +1,22 @@
 #include <PCH.h>
 
+#include "Core/Aliases.h"
+#include "Core/DebugTools.h"
 #include "Shader.h"
 #include <cassert>
 
 #include <fstream>
 #include "Core/Files.h"
 
+#include <ios>
 #include <shaderc/shaderc.hpp>
 #include <spirv_cross.hpp>
 
-namespace PetrolEngine {
+#include <filesystem>
+#include <fstream>
 
+namespace PetrolEngine {
+    bool Shader::alwaysCompile = false;
     shaderc_shader_kind shaderTypeToShadercShaderKind(ShaderType type) {
         switch (type) {
             case ShaderType::Vertex:   return shaderc_glsl_vertex_shader;
@@ -19,7 +25,29 @@ namespace PetrolEngine {
         }
     }
 
-    Vector<uint32> compileShader(const String& name, const String& shaderSource, ShaderType type) {
+    String shaderTypeToShadercExtensionS(ShaderType type) {
+        switch (type) {
+            case ShaderType::Vertex:   return ".vert";
+            case ShaderType::Fragment: return ".frag";
+            case ShaderType::Geometry: return ".geom";
+        }
+    }
+
+    Vector<uint32> compileShader(const String& name, const String& shaderSource, ShaderType type) { LOG_FUNCTION();
+        String cacheName = "sprv_" + name + shaderTypeToShadercExtensionS(type) + ".cache";
+        if(std::filesystem::exists(cacheName) && !Shader::alwaysCompile){ 
+            std::ifstream file(cacheName, std::ios::in | std::ios::binary);
+
+            file.seekg (0, file.end);
+            int length = file.tellg();
+            file.seekg (0, file.beg);
+            
+            Vector<uint32> res;
+            res.resize(length/sizeof(uint32));
+            file.read((char*)res.data(), length);
+            return res;
+        }
+
         shaderc::Compiler compiler;
         shaderc::CompileOptions options;
 
@@ -40,14 +68,19 @@ namespace PetrolEngine {
                 options
         );
 
-        if(!result.GetCompilationStatus())
-            return Vector<uint32>(result.cbegin(), result.cend());
+        if(!result.GetCompilationStatus()){
+            std::ofstream file(cacheName, std::ios::out | std::ios::binary);
+            Vector<uint32> res(result.cbegin(), result.cend());
 
+            file.write((char*)res.data(), res.size()*sizeof(uint32));
+            file.close();
+            return res;
+        }
         LOG("Shader compilation failed: " + result.GetErrorMessage(), 3);
         return {};
     }
 
-    void Shader::compile() {
+    void Shader::compile() { LOG_FUNCTION();
         this->vertexByteCode   = compileShader(this->name, this->vertexShaderSourceCode  , ShaderType::Vertex  );
         this->fragmentByteCode = compileShader(this->name, this->fragmentShaderSourceCode, ShaderType::Fragment);
 
@@ -69,7 +102,7 @@ namespace PetrolEngine {
             this->reflect(this->geometryByteCode, ShaderType::Geometry);
     }
 
-    void Shader::reflect(const Vector<uint32>& spv, ShaderType type) {
+    void Shader::reflect(const Vector<uint32>& spv, ShaderType type) { LOG_FUNCTION();
         spirv_cross::Compiler compiler(spv);
         spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 

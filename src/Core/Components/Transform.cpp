@@ -8,6 +8,7 @@ namespace PetrolEngine{
     void Transform::updateTransformMatrix() {
         glm::mat4& matrix = this->transformation;
 
+        matrix  = glm::mat4(1.0f);
         matrix  = glm::translate(matrix, this->position);
         matrix  = glm::scale    (matrix, this->scale   );
         matrix *= glm::toMat4   (        this->rotation);
@@ -21,7 +22,7 @@ namespace PetrolEngine{
     void Transform::updateOrientation(){
         glm::quat r = rotation;
 
-        for(Transform* p = parent; p; p = p->parent)
+        for(const Transform* p = parent; p; p = p->parent)
             r = p->rotation * r;
 
         forward = glm::rotate(r, glm::vec3(0.0f, 0.0f, -1.0f));

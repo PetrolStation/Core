@@ -1,33 +1,25 @@
 #pragma once
 
-#include "Core/Aliases.h"
 #include <Core/Aliases.h>
-
+#include <type_traits>
+#include "InspectorTypes.h"
+#include "../Serializer.h"
+#define Serialize
 namespace PetrolEngine {
     class Transform;
     class Entity;
 
-    enum InspectorType{
-        Float, Float2, Float3, Float4,
-        Int, Int2, Int3, Int4,
-        Text
-    };
-
-    using InspectorTypes = UnorderedMap<String, Pair<InspectorType, uint>>;
-
     class InternalComponent {
     public:
-        virtual const InspectorTypes inspectorTypes() {return {};};
-
         // TODO: maybe delete it but for now i like my pointers stable
         static constexpr auto in_place_delete = true;
 
         Entity* entity = nullptr;
+        uint32 typeId = 0;
     };
 
     class NativeComponent: public InternalComponent {
     public:
-        uint64 typeId = 0;
     };
 
     class Component: public InternalComponent {
@@ -43,3 +35,23 @@ namespace PetrolEngine {
         virtual ~Component() {};
     };
 }
+extern UnorderedMap<int32, std::vector<ClassExpose>>* exposedElements;
+
+template<class T, typename U>
+[[Attr("def", "func",  "call('subject', location)")]]
+void __Expose(const char* name, U T::* arg){
+    entt::id_type id = entt::type_hash<T>::value();
+    if(exposedElements == nullptr) exposedElements = new UnorderedMap<int32, std::vector<ClassExpose>>();
+    auto elem = exposedElements->find(entt::type_hash<T>::value());
+    if(elem == exposedElements->end())
+        exposedElements->emplace<int32, std::vector<ClassExpose>>(entt::type_hash<T>::value(), {});
+    
+    //if(exposedElement == nullptr) exposedElement = new std::vector<ClassExpose>();
+    (*exposedElements)[id].push_back({
+        name,
+        PetrolEngine::inspectTypeInt<U>(),
+        (uint32)offsetOf(arg)
+    });
+}
+
+

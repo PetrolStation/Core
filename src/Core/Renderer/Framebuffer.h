@@ -37,7 +37,7 @@ namespace PetrolEngine {
 	public:
         Vector<Texture*> attachments;
 
-        virtual void addAttachment(Texture*& texture) = 0;
+        virtual void addAttachment(Texture* texture) = 0;
 
         NO_DISCARD uint getID () const { return  id; }
         NO_DISCARD uint getTID() const { return tid; }

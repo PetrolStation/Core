@@ -13,9 +13,9 @@ namespace PetrolEngine {
     public:
         glm::ivec2 resolution = glm::ivec2(1280, 720);
 
-        float zoom  =  60.0f;
-        float near_ =   0.1f; // near and far are reserved words in msvc
-        float far_  = 500.0f;
+        [[Expose]] [[Serialize]] float zoom  =  60.0f;
+        [[Expose]] [[Serialize]] float near_ =   0.1f; // near and far are reserved words in msvc
+        [[Expose]] [[Serialize]] float far_  = 500.0f;
 
         Camera();
 

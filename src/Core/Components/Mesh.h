@@ -13,7 +13,7 @@
 #include "Core/Renderer/VertexArray.h"
 
 #include "Core/Components/Component.h"
-
+#include "Vertex.h"
 #include <Core/Components/MeshRenderer.h>
 
 #include "Material.h"

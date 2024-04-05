@@ -48,7 +48,9 @@ namespace PetrolEngine {
 		DEPTH16  = 0x0085,
 		DEPTH24  = 0x0185,
 		DEPTH32  = 0x0205,
-		DEPTH32F = 0x1205
+		DEPTH32F = 0x1205,
+
+        DEPTH24STENCIL8 = 0x0007
 	};
 
     enum class TextureType: uint16{

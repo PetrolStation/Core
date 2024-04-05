@@ -6,15 +6,12 @@
 #include <mutex>
 #include <fstream>
 
-/*
-#if defined(__linux__)
+#if defined(__IS_LINUX__)
 #    define DEBUG_TOOLS_CLOCK std::chrono::system_clock
-#else
+#elif defined(__IS_WINDOWS__)
 #    define DEBUG_TOOLS_CLOCK std::chrono::steady_clock
 #endif
-*/
 
-#define DEBUG_TOOLS_CLOCK std::chrono::system_clock
 namespace PetrolEngine::Debugging {
 
 	using TimeUnit = std::chrono::microseconds;
@@ -22,7 +19,7 @@ namespace PetrolEngine::Debugging {
 	// self-explanatory I think
 	struct FunctionSpecification {
 		std::thread::id threadID;
-		std::string     name;
+		const char*     name;
 		long long       startTimePoint;
 		long long       duration;
 	};
@@ -57,7 +54,8 @@ namespace PetrolEngine::Debugging {
 	};
 };
 
-#define LOG_SCOPE_LINE2(name, line) PetrolEngine::Debugging::ScopeTimer timer##line(name)
+//#define LOG_SCOPE_LINE2(name, line) PetrolEngine::Debugging::ScopeTimer timer##line(name)
+#define LOG_SCOPE_LINE2(name, line) 
 #define LOG_SCOPE_LINE(name, line) LOG_SCOPE_LINE2(name, line)
 #define LOG_SCOPE(name) LOG_SCOPE_LINE(name, __LINE__)
 #define LOG_FUNCTION() LOG_SCOPE(CURRENT_FUNCTION)

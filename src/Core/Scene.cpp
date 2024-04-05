@@ -15,6 +15,7 @@
 #include "Components/Camera.h"
 #include "Components/Properties.h"
 #include "Components/Sprite.h"
+#include "Serializer.h"
 
 namespace PetrolEngine {
     Vector<Scene*> loadedScenes;
@@ -26,22 +27,37 @@ namespace PetrolEngine {
         return time - f;
     }
 
-    Entity* Scene::createEntity(const char* name, Entity* parent) {
-        Entity* entity = new Entity(sceneRegistry.create(), this);
+    void Scene::serialize(){
+        NJSONOutputArchive json_archive;
+        
+        entt::basic_snapshot{this->sceneRegistry}
+            .get<entt::entity>(json_archive)
+            .get<Transform>(json_archive);
+        json_archive.Close();
+        std::string json_output = json_archive.AsString();
+        printf("json:%s", json_output.c_str());
+    }
+
+    void Scene::deserialize(){
+
+    }
+
+    Entity* Scene::createEntity(String name, Entity* parent) {
+        Entity* entity = new Entity(sceneRegistry.create(), this, name);
         entities.push_back(entity);
         
-        entity->addComponent<Properties>(name);
+        entity->addComponent<Properties>(name.c_str());
         entity->parent = parent;
         if(parent != nullptr) parent->children.push_back(entity);
         return entity;
     }
 
-    GameObject* Scene::createGameObject(const char* name, Entity* parent) {
-        GameObject* entity = new GameObject(sceneRegistry.create(), this);
+    GameObject* Scene::createGameObject(String name, Entity* parent) {
+        GameObject* entity = new GameObject(sceneRegistry.create(), this, name);
         
         entities.push_back(entity);
         
-        entity->addComponent<Properties>(name);
+        entity->addComponent<Properties>(name.c_str());
         entity->parent = parent;
         if(parent != nullptr) parent->children.push_back(entity);
 

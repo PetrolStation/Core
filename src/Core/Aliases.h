@@ -22,6 +22,9 @@
 
 #if defined(DEBUG)
 #    define DEBUG_LEVEL_3
+#    define DEBUG_STATEMENT(x) x
+#else
+#    define DEBUG_STATEMENT(x)
 #endif
 
 #if defined(DEBUG_LEVEL_3)
@@ -202,6 +205,10 @@ using TypeIndex = std::type_index;
 template<typename T>
 using List = std::list<T>;
 
+template<typename T>
+using InitList = std::initializer_list<T>;
+
+
 using uint = unsigned int;
 
 // types with guaranteed length
@@ -260,7 +267,8 @@ constexpr const char* strEnd           (const char *str) { return *str ?  strEnd
 constexpr const char* constExprFilename(const char* str) { return strSlant(str) ? rSlant(strEnd(str)) : str; }
 
 
-template<typename T, typename U> constexpr size_t offsetOf(U T::*member) {
+template<typename T, typename U>
+constexpr size_t offsetOf(U T::*member) {
     return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 }
 
