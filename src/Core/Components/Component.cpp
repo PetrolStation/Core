@@ -1,8 +1,9 @@
 #include "Component.h"
+#include "Core/EventStack.h"
 #include <Core/Components/Entity.h>
 
 
-UnorderedMap<int32, std::vector<ClassExpose>>* exposedElements;
+UnorderedMap<entt::id_type, std::vector<ClassExpose>> exposedElements;
 
 namespace PetrolEngine {    
 }

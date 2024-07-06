@@ -1,59 +1,58 @@
 #pragma once
 
 #include "Core/Aliases.h"
-#include "json.hpp"
+#include "entt/entt.hpp"
 
 namespace PetrolEngine {
 
-    class Entity;
-    class GameObject;
-    class SystemManager;
+class Entity;
+class GameObject;
+class SystemManager;
 
-    uint64_t timeMillisec();
-    
-    class Scene {
-        public:
-        Entity* createEntity(String name, Entity* parent = nullptr);
+uint64_t timeMillisec();
 
-        GameObject* createGameObject(String name, Entity* parent = nullptr);
+class Scene {
+public:
+  Entity *createEntity(String name, Entity *parent = nullptr);
 
-        Entity* getEntityById(unsigned int id);
+  GameObject *createGameObject(String name, Entity *parent = nullptr);
 
-        template<typename T>
-        Entity* getEntityByComponent() {
-            auto group = sceneRegistry.view<T>();
+  Entity *getEntityById(unsigned int id);
 
-            for (auto &entity: group)
-                return getEntityById((unsigned int)entity);
+  template <typename T> Entity *getEntityByComponent() {
+    auto group = sceneRegistry.view<T>();
 
-            return nullptr;
-        }
+    for (auto &entity : group)
+      return getEntityById((unsigned int)entity);
 
-        Scene();
-        ~Scene();
+    return nullptr;
+  }
 
-        Scene(const Scene&) = delete;
-        Scene(Scene&&) = default;
+  Scene();
+  ~Scene();
 
-        void update();
-        void start();
-        
-        entt::registry sceneRegistry;
+  Scene(const Scene &) = delete;
+  Scene(Scene &&) = default;
 
-        void serialize();
-        void deserialize();
+  void update();
+  void render();
+  void start();
 
-        bool isStarted() const { return started; }
-        Vector<Entity*> entities;
-    private:
-        Vector<Entity*> toDelete;
-        SystemManager* systemManager;
-        bool started = false;
-        friend class Entity;
-        friend class SystemManager;
-	};
-    
-    extern Vector<Scene*> loadedScenes;
-}
+  entt::registry sceneRegistry;
 
+  void serialize();
+  void deserialize();
 
+  bool isStarted() const { return started; }
+  Vector<Entity *> entities;
+
+private:
+  Vector<Entity *> toDelete;
+  SystemManager *systemManager;
+  bool started = false;
+  friend class Entity;
+  friend class SystemManager;
+};
+
+extern Vector<Scene *> loadedScenes;
+} // namespace PetrolEngine

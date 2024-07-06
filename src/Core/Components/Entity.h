@@ -14,8 +14,23 @@ namespace PetrolEngine {
         bool started = false;
         Scene* scene = nullptr;
 
-        Vector<void(*)(Scene*)> systemUpdates;
-        Vector<void(*)(Scene*)> systemStarts;
+        Set<void(*)(Scene*)> systemUpdates;
+        Set<void(*)(Scene*)> systemStarts;
+        Set<void(*)(Scene*, NJSONOutputArchive&)> systemsSerialize;
+        Set<void(*)(Scene*, NJSONInputArchive&)> systemsDeserialize;
+        /*NJSONOutputArchive json_archive;
+
+
+        void setSerializeTarget(String path){
+            
+        }
+
+        template<typename T>
+        static void serializeC(Scene* scene, NJSONOutputArchive& archive){
+            //entt::basic_snapshot{scene->sceneRegistry}
+            //json_archive;
+            
+        }*/
 
         template<typename T>
         static void systemUpdate(Scene* scene) {
@@ -40,15 +55,28 @@ namespace PetrolEngine {
         }
 
         template<typename T>
+        static void systemSerialize(Scene* scene, NJSONOutputArchive& in) {
+            entt::basic_snapshot{scene->sceneRegistry}.get<T>(in);
+        }
+
+        template<typename T>
+        static void systemDeserialize(Scene* scene, NJSONInputArchive& in) {
+            entt::basic_snapshot_loader{scene->sceneRegistry}.get<T>(in);
+        }
+
+        template<typename T>
         void registerSystem() {
-            static bool registered = false;
+            //static bool registered = false;
 
-            if(registered) return;
+            //if(registered) return;
 
-            systemUpdates.push_back(systemUpdate<T>);
-            systemStarts .push_back(systemStart <T>);
+            systemUpdates.insert(systemUpdate<T>);
+            systemStarts .insert(systemStart <T>);
+        
+            systemsSerialize  .insert(systemSerialize  <T>);
+            systemsDeserialize.insert(systemDeserialize<T>);
 
-            registered = true;
+            //registered = true;
         }
 
         void update() { LOG_FUNCTION();
@@ -59,7 +87,7 @@ namespace PetrolEngine {
 
             started = true;
 
-            for(int i = 0; i < systemStarts.size(); i++) systemStarts[i](scene);
+            for(auto& system : systemStarts) system(scene);
         }
     };
    
@@ -70,7 +98,7 @@ namespace PetrolEngine {
 
 		template<typename T, typename ... Args>
 		T& addComponent(Args&&... args) {
-            auto typeId = entt::type_hash<T>::value();
+            constexpr uint32 typeId = entt::type_hash<T>::value();
             auto& component = scene->sceneRegistry.emplace<T>(entity, std::forward<Args>(args)...);
             component.entity = this;
             

@@ -23,7 +23,7 @@ namespace PetrolEngine{
         template<typename T>
         PhysicsController3D(                         ){ this->creator = new T(); component = creator->newPhysicsController(); }
         PhysicsController3D(PhysicsCreator3D* creator){ this->creator = creator; component = creator->newPhysicsController(); }
-
+        PhysicsController3D() = default;
         ~PhysicsController3D() {
             for (auto& collider : colliders) delete collider;
             delete this->component;

@@ -52,6 +52,7 @@ namespace PetrolEngine{
     class BoxCollider3D: public Collider3D {
     public:
         BoxCollider3D(int m, bool ci) {this->mass = m; this->localInertia = ci;};
+        BoxCollider3D() = default;
         
         Collider3DApi* newShape() {
             return entity->getScene()->getEntityByComponent<PhysicsController3D>()->getComponent<PhysicsController3D>().newBoxCollider(mass, localInertia);
