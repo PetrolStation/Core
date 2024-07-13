@@ -4,7 +4,6 @@
 
 #include "Core/Components/Vertex.h"
 #include <Static/Renderer/Renderer.h>
-#include <Core/Components/VertexData.h>
 #include <Core/Components/Entity.h>
 
 namespace PetrolEngine {
@@ -53,19 +52,11 @@ namespace PetrolEngine {
         recalculateMesh();
     }
 
-    void Mesh::recalculateMesh(void* additionalData, int64 additionalDataSize) {
+    void Mesh::recalculateMesh(VertexData adVertexData) {
         this->meshRenderer->vertexArray = Renderer::createVertexArray();
 
         auto vertexBufferS = Renderer::newVertexBuffer(standardLayout);
         auto indexBuffer   = Renderer::newIndexBuffer ();
-/*
-        if(!additionalLayout.getElements().empty() && additionalData != nullptr && additionalDataSize != 0){
-            auto vertexBufferE = Renderer::newVertexBuffer(additionalLayout);
-
-            vertexBufferE->setData(additionalData, (int64) indices.size() * (int64) sizeof(Vertex));
-
-            this->vertexArray->addVertexBuffer(vertexBufferE);
-        }*/
 
         uint64 vertexCount = 0;
 
@@ -78,15 +69,27 @@ namespace PetrolEngine {
         vertexData.changeLayout(standardLayout);
         vertexData.resize(vertexCount);
 
-        for(int i = 0; i < vertices          .size(); i++) vertexData[i]["position"] = vertices[i];
-        for(int i = 0; i < normals           .size(); i++) vertexData[i]["normal"  ] = normals [i];
-        for(int i = 0; i < textureCoordinates.size(); i++) vertexData[i]["texCords"] = textureCoordinates[i];
+        for(int i = 0; i < vertices          .size(); i++) vertexData[i]["position"  ] = vertices[i];
+        for(int i = 0; i < normals           .size(); i++) vertexData[i]["normal"    ] = normals [i];
+        for(int i = 0; i < textureCoordinates.size(); i++) vertexData[i]["texCords"  ] = textureCoordinates[i];
+        for(int i = 0; i < boneIDs           .size(); i++) vertexData[i]["boneID"    ] = boneIDs [i];
+        for(int i = 0; i < boneWeights       .size(); i++) vertexData[i]["boneWeight"] = boneWeights [i];
 
         vertexBufferS->setData(vertexData.data, (int64) vertexCount    * (int64) vertexData.elementSize);
         indexBuffer  ->setData(indices.data() , (int64) indices.size() * (int64) sizeof(uint));
 
         this->meshRenderer->vertexArray-> setIndexBuffer( indexBuffer );
         this->meshRenderer->vertexArray->addVertexBuffer(vertexBufferS);
+
+        if(adVertexData.elementCount != 0){
+            auto vertexBufferE = Renderer::newVertexBuffer(additionalLayout);
+
+            vertexBufferE->setData(adVertexData.data, (int64) vertexCount    * (int64) adVertexData.elementSize);
+
+            this->meshRenderer->vertexArray->addVertexBuffer(vertexBufferE);
+        }
+
+
     }
 
     void Mesh::invertFaces() {
